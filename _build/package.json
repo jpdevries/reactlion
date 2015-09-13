@@ -1,7 +1,8 @@
 {
-  "name": "lessons",
-  "version": "0.0.0",
+  "name": "reactlion",
+  "version": "1.0.0",
   "description": "",
+  "private":true,
   "main": "index.js",
   "dependencies": {
     "grunt-jsx": "^0.1.8"
@@ -21,6 +22,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "JP DeVries",
+  "license": "MIT"
 }
