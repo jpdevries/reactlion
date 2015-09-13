@@ -1,0 +1,36 @@
+body {
+  -webkit-animation: colorchange 20s infinite;
+          animation: colorchange 20s infinite;
+  /* animation-name followed by duration in seconds*/
+  /* you could also use milliseconds (ms) or something like 2.5s */ }
+
+a {
+  color: #646464;
+  text-decoration: none;
+  font-family: sans-serif; }
+  a:hover {
+    text-decoration: underline; }
+
+@-webkit-keyframes colorchange {
+  0% {
+    background: #C9C5E0; }
+  25% {
+    background: #D2EDD8; }
+  50% {
+    background: #E5E9AE; }
+  75% {
+    background: #D2EDD8; }
+  100% {
+    background: #C9C5E0; } }
+
+@keyframes colorchange {
+  0% {
+    background: #C9C5E0; }
+  25% {
+    background: #D2EDD8; }
+  50% {
+    background: #E5E9AE; }
+  75% {
+    background: #D2EDD8; }
+  100% {
+    background: #C9C5E0; } }
