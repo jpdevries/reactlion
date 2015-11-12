@@ -11,7 +11,7 @@ var lastMousePos = new Point(window.innerWidth * .5, window.innerHeight * .5); /
 var mouseVelocity = new Point(Math.random() * (window.innerWidth * .4), Math.random() * (window.innerHeight * .4)); // base the initial mouse velocity off screensize
 var breakability = .9; // decimal between 0-1, closer to 1 the further polygons push away from eachother
 
-function getTransform(movable,polarX,polarY) {
+function getTransform(movable,movability,polarX,polarY) {
     if(!movable) return ('translate(0,0)');
     
     var x = mouseVelocity.x;
