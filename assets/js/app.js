@@ -562,9 +562,9 @@ var Polygon = React.createClass({displayName: "Polygon",
           destColor = LightenDarkenColor(destColor,(Math.sin(this.state.darkAmnt) * colorReach));
       
           // let React do its thing
-          return React.createElement("polygon", {fill: destColor, transform: getTransform(movable,polarity.x,polarity.y), points: this.state.origPoints});
+          return React.createElement("polygon", {fill: destColor, transform: getTransform(movable,movability,polarity.x,polarity.y), points: this.state.origPoints});
     
-          function getTransform(movable,polarX,polarY) {
+          function getTransform(movable,movability,polarX,polarY) {
               if(!movable) return ('translate(0,0)');
               
               var x = mouseVelocity.x;
