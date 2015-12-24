@@ -15,16 +15,29 @@ function Point(x, y) {
     this.y = y;
 }
 
+function explode() {
+    mouseVelocity = new Point(Math.random() * (window.innerWidth * .4), Math.random() * (window.innerHeight * .4)); // base the initial mouse velocity off screensize
+}
+
 var lastMousePos = new Point(window.innerWidth * .5, window.innerHeight * .5); // assume the mouse starts at the center
-var mouseVelocity = new Point(Math.random() * (window.innerWidth * .4), Math.random() * (window.innerHeight * .4)); // base the initial mouse velocity off screensize
+var mouseVelocity;
 var breakability = .9; // decimal between 0-1, closer to 1 the further polygons push away from eachother
 
-setInterval(function () {
+explode();
+
+document.addEventListener('keydown', function (event) {
+    event.preventDefault();
+    if (event.which === 32) {
+        explode();
+    }
+});
+
+setTimeout(function () {
     // wait 4 seconds then start listening to mouse move
     document.body.onmousemove = function (e) {
         var mousePos = new Point(e.screenX, e.screenY); // current mouse position
-        // calculate moues velocity based on distance between frames, breakability, and window size   
-        mouseVelocity = new Point((mousePos.x - lastMousePos.x) / (window.innerWidth * (1 - breakability)), (mousePos.y - lastMousePos.y) / (window.innerHeight * (1 - breakability)));
+        // calculate moues velocity based on distance between frames, breakability, and window size
+        mouseVelocity = new Point(window.innerWidth * (mousePos.x - lastMousePos.x) / (window.innerWidth * (1 - breakability)), window.innerHeight * (mousePos.y - lastMousePos.y) / (window.innerHeight * (1 - breakability)));
 
         lastMousePos = mousePos;
     };
