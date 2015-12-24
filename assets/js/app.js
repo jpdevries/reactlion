@@ -518,22 +518,35 @@ function Point(x, y) {
   this.y = y;
 }
 
+function explode() {
+  mouseVelocity = new Point(Math.random() * (window.innerWidth * .4), Math.random() * (window.innerHeight * .4)); // base the initial mouse velocity off screensize
+}
+
 var lastMousePos = new Point(window.innerWidth * .5, window.innerHeight * .5); // assume the mouse starts at the center
-var mouseVelocity = new Point(Math.random() * (window.innerWidth * .4), Math.random() * (window.innerHeight * .4)); // base the initial mouse velocity off screensize
+var mouseVelocity;
 var breakability = .9; // decimal between 0-1, closer to 1 the further polygons push away from eachother
+
+explode();
+
+document.addEventListener('keydown', function(event) {
+  event.preventDefault();
+    if (event.which === 32) {
+        explode();
+    }
+});
 
 function getTransform(movable,movability,polarX,polarY) {
     if(!movable) return ('translate(0,0)');
-    
+
     var x = mouseVelocity.x;
     var y = mouseVelocity.y;
-    
+
     if(polarX) x = 0-x;
     if(polarY) y = 0-y;
-    
+
     x *= movability.x;
     y *= movability.y;
-    
+
     return ('translate(' + x + ' ' + y + ')');
 }
 
@@ -565,11 +578,11 @@ function LightenDarkenColor(col, amt) { //https://css-tricks.com/snippets/javasc
     return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
 }
 
-setInterval(function(){ // wait 4 seconds then start listening to mouse move
-    document.body.onmousemove = function(e) {    
+setTimeout(function(){ // wait 4 seconds then start listening to mouse move
+    document.body.onmousemove = function(e) {
         var mousePos = new Point(e.screenX, e.screenY); // current mouse position
-        // calculate moues velocity based on distance between frames, breakability, and window size    
-        mouseVelocity = new Point((mousePos.x - lastMousePos.x) / (window.innerWidth * (1-breakability)), (mousePos.y - lastMousePos.y) / (window.innerHeight * (1-breakability)));
+        // calculate moues velocity based on distance between frames, breakability, and window size
+        mouseVelocity = new Point(window.innerWidth * (mousePos.x - lastMousePos.x) / (window.innerWidth * (1-breakability)), window.innerHeight * (mousePos.y - lastMousePos.y) / (window.innerHeight * (1-breakability)));
 
         lastMousePos = mousePos;
     }
@@ -579,9 +592,9 @@ function step(timestamp) { // onEnterFrame
     // apply friction to mouse
     mouseVelocity.x *= 0.86;
     mouseVelocity.y *= 0.86;
-    
+
     window.requestAnimationFrame(step); // keep the clock ticking
 }
 
 // get the party started
-window.requestAnimationFrame(step); 
+window.requestAnimationFrame(step);
