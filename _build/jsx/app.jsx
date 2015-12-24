@@ -7,15 +7,28 @@ function Point(x, y) {
   this.y = y;
 }
 
-var lastMousePos = new Point(window.innerWidth * .5, window.innerHeight * .5); // assume the mouse starts at the center
-var mouseVelocity = new Point(Math.random() * (window.innerWidth * .4), Math.random() * (window.innerHeight * .4)); // base the initial mouse velocity off screensize
-var breakability = .9; // decimal between 0-1, closer to 1 the further polygons push away from eachother
+function explode() {
+  mouseVelocity = new Point(Math.random() * (window.innerWidth * .4), Math.random() * (window.innerHeight * .4)); // base the initial mouse velocity off screensize
+}
 
-setInterval(function(){ // wait 4 seconds then start listening to mouse move
-    document.body.onmousemove = function(e) {    
+var lastMousePos = new Point(window.innerWidth * .5, window.innerHeight * .5); // assume the mouse starts at the center
+var mouseVelocity;
+var breakability = 0; // decimal between 0-1, closer to 0 the further polygons push away from eachother
+
+explode();
+
+document.addEventListener('keydown', function(event) {
+  event.preventDefault();
+    if (event.which === 32) {
+        explode();
+    }
+});
+
+setTimeout(function(){ // wait 4 seconds then start listening to mouse move
+    document.body.onmousemove = function(e) {
         var mousePos = new Point(e.screenX, e.screenY); // current mouse position
-        // calculate moues velocity based on distance between frames, breakability, and window size    
-        mouseVelocity = new Point((mousePos.x - lastMousePos.x) / (window.innerWidth * (1-breakability)), (mousePos.y - lastMousePos.y) / (window.innerHeight * (1-breakability)));
+        // calculate moues velocity based on distance between frames, breakability, and window size
+        mouseVelocity = new Point(window.innerWidth * (mousePos.x - lastMousePos.x) / (window.innerWidth * (1-breakability)), window.innerHeight * (mousePos.y - lastMousePos.y) / (window.innerHeight * (1-breakability)));
 
         lastMousePos = mousePos;
     }
@@ -43,31 +56,31 @@ var Polygon = React.createClass({
           var movable = this.state.movable;
           var polarity = this.state.polarity;
           var movability = this.state.movability;
-          
+
           // increment the darken amount. this number keeps getting bigger forever, but we take the sin of it so it fluctuates gradually between -1 and 1
           this.state.darkAmnt += colorVelocity;
-    
+
           // calculate the destination color
           destColor = LightenDarkenColor(destColor,(Math.sin(this.state.darkAmnt) * colorReach));
-      
+
           // let React do its thing
           return <polygon fill={destColor} transform={getTransform(movable,polarity.x,polarity.y)} points={this.state.origPoints}></polygon>;
-    
+
           function getTransform(movable,polarX,polarY) {
               if(!movable) return ('translate(0,0)');
-              
+
               var x = mouseVelocity.x;
               var y = mouseVelocity.y;
-              
+
               if(polarX) x = 0-x;
               if(polarY) y = 0-y;
-              
+
               x *= movability.x;
               y *= movability.y;
-              
+
               return ('translate(' + x + ' ' + y + ')');
           }
-          
+
           function LightenDarkenColor(col, amt) { //https://css-tricks.com/snippets/javascript/lighten-darken-color/
               var usePound = false;
 
@@ -108,13 +121,13 @@ var superCoolLion = document.getElementById('super-cool-lion');
 
 function step(timestamp) { // onEnterFrame
     React.render(<SuperCoolLion />, superCoolLion); // trigger a repaint
-    
+
     window.requestAnimationFrame(step); // keep the clock ticking
-    
+
     // apply friction to mouse
     mouseVelocity.x *= 0.86;
     mouseVelocity.y *= 0.86;
 }
 
 // get the party started
-window.requestAnimationFrame(step); 
+window.requestAnimationFrame(step);
